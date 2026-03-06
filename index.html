@@ -1,467 +1,1090 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ihsan Mokhlisse — OpenShift Consultant & Platform Engineer</title>
-  <meta name="description" content="OpenShift Consultant & Platform Engineer at Red Hat. Supply chain security, GitOps, Kubernetes. Open source contributor to OpenClaw, Nextcloud, OpenShift.">
+  <title>Ihsan Mokhlisse — Platform Engineer & Security Architect</title>
+  <meta name="description" content="OpenShift Consultant & Platform Engineer at Red Hat. Software supply chain security, GitOps, Kubernetes. Open source contributor.">
   <meta name="author" content="Ihsan Mokhlisse">
   <meta property="og:title" content="Ihsan Mokhlisse — Platform Engineer">
   <meta property="og:description" content="OpenShift Consultant at Red Hat. Supply chain security, GitOps, open source.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ihsanmokhlisse.pages.dev">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9670;</text></svg>">
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --text-muted: #8b949e;
-      --accent: #58a6ff;
-      --accent-soft: #1f6feb33;
-      --green: #3fb950;
-      --red: #ee5a5a;
-      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-      --mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+      --bg: #07080a;
+      --bg-elevated: #0c0e12;
+      --bg-card: #10131a;
+      --bg-card-hover: #151923;
+      --border: #1c2030;
+      --border-accent: #2a3050;
+      --text: #d4dae8;
+      --text-bright: #eef1f8;
+      --text-muted: #5c6580;
+      --text-dim: #3a4060;
+      --accent: #5b8af0;
+      --accent-bright: #7da4ff;
+      --accent-dim: #2a3f7a;
+      --accent-glow: rgba(91, 138, 240, 0.08);
+      --green: #4ade80;
+      --green-dim: #1a3a2a;
+      --amber: #f0b85b;
+      --red: #f05b5b;
+      --cyan: #5bf0e0;
+      --mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+      --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius: 6px;
+      --gutter: clamp(1rem, 3vw, 2rem);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) var(--bg);
+    }
+
     body {
-      font-family: var(--font);
+      font-family: var(--sans);
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
+    /* ── Noise grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── Subtle grid background ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; }
+
+    /* ── Layout ── */
     .container {
-      max-width: 800px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 3rem 1.5rem;
+      padding: 0 var(--gutter);
     }
 
-    /* Header */
-    .header {
-      margin-bottom: 2.5rem;
-    }
-
-    .header h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .header .subtitle {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .header .subtitle a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .header .subtitle a:hover {
-      text-decoration: underline;
-    }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    .meta span {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    /* Sections */
-    .section {
-      margin-bottom: 2.5rem;
-    }
-
-    .section h2 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
+    /* ── Top bar ── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      background: rgba(7, 8, 10, 0.8);
       border-bottom: 1px solid var(--border);
     }
 
-    .section p {
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
+    .topbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 52px;
     }
 
-    /* Cards */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 0.75rem;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover {
-      border-color: var(--accent);
-    }
-
-    .card h3 {
-      font-size: 1rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .card h3 a {
-      color: var(--accent);
+    .topbar-logo {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-bright);
+      letter-spacing: 0.02em;
       text-decoration: none;
     }
 
-    .card h3 a:hover {
-      text-decoration: underline;
+    .topbar-nav {
+      display: flex;
+      gap: 0.25rem;
     }
 
-    .card .stars {
+    .topbar-nav a {
+      font-family: var(--mono);
+      font-size: 0.7rem;
       color: var(--text-muted);
-      font-size: 0.8rem;
-      margin-left: 0.5rem;
-    }
-
-    .card .desc {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    /* Expertise */
-    .expertise-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .expertise-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem;
-    }
-
-    .expertise-item h4 {
-      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius);
+      transition: color 0.2s, background 0.2s;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
     }
 
-    .expertise-item .tags {
+    .topbar-nav a:hover {
+      color: var(--text);
+      background: var(--bg-card);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding-top: 140px;
+      padding-bottom: 80px;
+      position: relative;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--green);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-label .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 6vw, 4.2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-bright);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 span {
+      color: var(--accent-bright);
+      font-style: normal;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .hero-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.35rem;
-    }
-
-    .tag {
-      display: inline-block;
-      background: var(--accent-soft);
-      color: var(--accent);
-      padding: 0.15rem 0.55rem;
-      border-radius: 20px;
-      font-size: 0.775rem;
+      gap: 1.5rem;
       font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
     }
 
-    /* Projects highlight */
-    .project-highlight {
+    .hero-meta span {
       display: flex;
-      gap: 0.5rem;
-      align-items: baseline;
+      align-items: center;
+      gap: 0.4rem;
     }
 
-    .project-highlight .badge {
-      background: var(--green);
-      color: var(--bg);
+    .hero-meta .val {
+      color: var(--text-muted);
+    }
+
+    /* ── Sections ── */
+    .section {
+      padding: 4rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-family: var(--mono);
       font-size: 0.7rem;
       font-weight: 600;
-      padding: 0.1rem 0.45rem;
-      border-radius: 4px;
-      white-space: nowrap;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
 
-    /* Timeline */
-    .timeline-item {
+    .section-header .count {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    /* ── Experience cards ── */
+    .exp-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 0.75rem;
+      transition: border-color 0.25s, background 0.25s, transform 0.25s;
       position: relative;
-      padding-left: 1.5rem;
-      margin-bottom: 1.25rem;
+      overflow: hidden;
     }
 
-    .timeline-item::before {
+    .exp-card::before {
       content: '';
       position: absolute;
       left: 0;
-      top: 0.5rem;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent-dim);
+      transition: background 0.25s;
+    }
+
+    .exp-card:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      transform: translateY(-1px);
+    }
+
+    .exp-card:hover::before {
       background: var(--accent);
     }
 
-    .timeline-item::after {
-      content: '';
-      position: absolute;
-      left: 3px;
-      top: 1.25rem;
-      width: 2px;
-      height: calc(100% + 0.25rem);
-      background: var(--border);
+    .exp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+      gap: 1rem;
     }
 
-    .timeline-item:last-child::after {
-      display: none;
+    .exp-role {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-bright);
     }
 
-    .timeline-item .date {
-      font-size: 0.775rem;
-      color: var(--text-muted);
+    .exp-org {
+      color: var(--accent-bright);
+      font-weight: 400;
+    }
+
+    .exp-date {
       font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+      padding-top: 0.15rem;
     }
 
-    .timeline-item h4 {
-      font-size: 0.95rem;
+    .exp-loc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 0.65rem;
     }
 
-    .timeline-item .org {
-      color: var(--accent);
+    .exp-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
     }
 
-    /* Links */
-    .links {
+    .exp-desc li {
+      margin-bottom: 0.3rem;
+      margin-left: 1rem;
+    }
+
+    .exp-tags {
       display: flex;
       flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      background: rgba(91, 138, 240, 0.08);
+      border: 1px solid rgba(91, 138, 240, 0.12);
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      letter-spacing: 0.02em;
+    }
+
+    .tag.green { color: var(--green); background: rgba(74, 222, 128, 0.06); border-color: rgba(74, 222, 128, 0.12); }
+    .tag.amber { color: var(--amber); background: rgba(240, 184, 91, 0.06); border-color: rgba(240, 184, 91, 0.12); }
+    .tag.cyan { color: var(--cyan); background: rgba(91, 240, 224, 0.06); border-color: rgba(91, 240, 224, 0.12); }
+
+    /* ── OSS contributions ── */
+    .oss-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      transition: border-color 0.25s, background 0.25s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .oss-card:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+    }
+
+    .oss-name {
+      font-weight: 600;
+      color: var(--text-bright);
+      margin-bottom: 0.2rem;
+    }
+
+    .oss-desc {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+    }
+
+    .oss-stars {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--amber);
+      white-space: nowrap;
+    }
+
+    /* ── Skills matrix ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 0.75rem;
     }
 
-    .link-btn {
+    .skill-group {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+
+    .skill-group h4 {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── Projects / Highlights ── */
+    .highlight-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 0.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .highlight-card .year {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: var(--bg);
+      background: var(--green);
+      padding: 0.1rem 0.45rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-right: 0.35rem;
+    }
+
+    .badge.amber { background: var(--amber); }
+
+    /* ── Education & Certs ── */
+    .edu-item {
+      display: flex;
+      gap: 1rem;
+      align-items: baseline;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .edu-item:last-child { border-bottom: none; }
+
+    .edu-date {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      min-width: 90px;
+    }
+
+    .edu-info h4 {
+      font-size: 0.95rem;
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+
+    .edu-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Articles / Talks placeholder ── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+    }
+
+    .empty-state .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+    /* ── Community ── */
+    .community-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .community-card .emoji { font-size: 1.5rem; line-height: 1; }
+
+    .community-card h4 {
+      font-size: 0.95rem;
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+
+    .community-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .community-card .duration {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    /* ── Languages ── */
+    .lang-bar {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .lang-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lang-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .lang-name {
+      font-size: 0.875rem;
+      color: var(--text);
+    }
+
+    .lang-level {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    /* ── Connect ── */
+    .connect-grid {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .connect-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      background: var(--surface);
+      gap: 0.5rem;
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.6rem 1.1rem;
+      border-radius: var(--radius);
+      padding: 0.7rem 1.2rem;
       color: var(--text);
       text-decoration: none;
-      font-size: 0.875rem;
-      transition: border-color 0.2s, background 0.2s;
+      font-family: var(--mono);
+      font-size: 0.775rem;
+      transition: all 0.25s;
     }
 
-    .link-btn:hover {
+    .connect-btn:hover {
       border-color: var(--accent);
-      background: var(--accent-soft);
+      background: var(--accent-glow);
+      color: var(--accent-bright);
+      transform: translateY(-2px);
     }
 
-    .link-btn svg {
-      width: 18px;
-      height: 18px;
+    .connect-btn svg {
+      width: 16px;
+      height: 16px;
       fill: currentColor;
     }
 
-    /* Footer */
-    footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
+    /* ── Footer ── */
+    .footer {
+      padding: 3rem 0;
       border-top: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 0.8rem;
       text-align: center;
     }
 
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
+    .footer p {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
     }
 
-    /* Responsive */
-    @media (max-width: 600px) {
-      .container { padding: 2rem 1rem; }
-      .header h1 { font-size: 1.5rem; }
-      .expertise-grid { grid-template-columns: 1fr; }
+    .footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate {
+      animation: fadeUp 0.6s ease-out both;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .topbar-nav a { padding: 0.3rem 0.4rem; font-size: 0.65rem; }
+      .exp-top { flex-direction: column; gap: 0.25rem; }
+      .oss-card { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 110px; padding-bottom: 50px; }
     }
   </style>
 </head>
 <body>
+<div class="page">
+
+  <!-- Top bar -->
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="#" class="topbar-logo">ihsan.mokhlisse</a>
+      <div class="topbar-nav">
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#oss">Open Source</a>
+        <a href="#skills">Skills</a>
+        <a href="#writing">Writing</a>
+        <a href="#connect">Connect</a>
+      </div>
+    </div>
+  </nav>
+
   <div class="container">
 
-    <!-- Header -->
-    <header class="header">
-      <h1>Ihsan Mokhlisse</h1>
-      <p class="subtitle">OpenShift Consultant & Platform Engineer at <a href="https://redhat.com" target="_blank" rel="noopener">Red Hat</a></p>
-      <div class="meta">
-        <span>&#x1F4CD; Paris, France</span>
-        <span>&#x1F3E2; Red Hat</span>
-        <span>&#x1F310; Arabic &middot; French &middot; English</span>
+    <!-- Hero -->
+    <section class="hero" id="about">
+      <div class="hero-glow"></div>
+      <div class="hero-label animate"><span class="dot"></span> Available for consulting & collaboration</div>
+      <h1 class="animate delay-1">Building <span>secure platforms</span><br>at enterprise scale.</h1>
+      <p class="hero-desc animate delay-2">
+        OpenShift Consultant & Platform Engineer at <strong style="color:var(--red)">Red Hat</strong>.
+        I architect software supply chain security, design GitOps operating models,
+        and contribute security hardening to open source projects used by hundreds of thousands of developers.
+      </p>
+      <div class="hero-meta animate delay-3">
+        <span>location <span class="val">Paris, France</span></span>
+        <span>company <span class="val">Red Hat</span></span>
+        <span>languages <span class="val">Arabic &middot; French &middot; English</span></span>
+        <span>focus <span class="val">Supply Chain Security &middot; GitOps &middot; K8s</span></span>
       </div>
-    </header>
+    </section>
 
-    <!-- About -->
-    <section class="section">
-      <h2>About</h2>
-      <p>I help enterprise clients build secure, production-grade container platforms. My focus areas are software supply chain security, GitOps automation, and Kubernetes at scale.</p>
-      <p>Active open source contributor — shipping security hardening features to projects used by hundreds of thousands of developers.</p>
+    <!-- Experience -->
+    <section class="section" id="experience">
+      <div class="section-header">
+        <h2>// Experience</h2>
+        <span class="count">5 roles</span>
+      </div>
+
+      <div class="exp-card animate">
+        <div class="exp-top">
+          <div>
+            <div class="exp-role">OpenShift Consultant & Platform Engineer &mdash; <span class="exp-org">Red Hat</span></div>
+          </div>
+          <span class="exp-date">Current</span>
+        </div>
+        <div class="exp-loc">Paris, France</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Consulting for enterprise clients on OpenShift 4.x platform engineering, architecture, and migration</li>
+            <li>Designing and implementing software supply chain security solutions (RHTAS, Sigstore)</li>
+            <li>Building GitOps operating models with ArgoCD, Kustomize, and multi-cluster promotion workflows</li>
+            <li>Training development teams on container-native CI/CD, drift detection, and PR-based deployments</li>
+            <li>Implementing RBAC models, namespace governance, and security policy enforcement</li>
+          </ul>
+        </div>
+        <div class="exp-tags">
+          <span class="tag">OpenShift 4.x</span>
+          <span class="tag">Kubernetes</span>
+          <span class="tag green">Sigstore</span>
+          <span class="tag green">RHTAS</span>
+          <span class="tag">ArgoCD</span>
+          <span class="tag">Tekton</span>
+          <span class="tag">Kustomize</span>
+          <span class="tag amber">GitLab CI</span>
+          <span class="tag amber">Azure DevOps</span>
+        </div>
+      </div>
+
+      <div class="exp-card animate">
+        <div class="exp-top">
+          <div>
+            <div class="exp-role">Platform Engineer &mdash; <span class="exp-org">Bax-Shop</span></div>
+          </div>
+          <span class="exp-date">May 2018 &mdash; Feb 2019</span>
+        </div>
+        <div class="exp-loc">Netherlands</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Implemented OpenShift and Kubernetes container orchestration platform</li>
+            <li>Migrated workloads from legacy infrastructure to containerized deployments</li>
+            <li>Built CI/CD pipelines and automated deployment workflows</li>
+          </ul>
+        </div>
+        <div class="exp-tags">
+          <span class="tag">OpenShift</span>
+          <span class="tag">Kubernetes</span>
+          <span class="tag">Docker</span>
+          <span class="tag amber">CI/CD</span>
+        </div>
+      </div>
+
+      <div class="exp-card animate">
+        <div class="exp-top">
+          <div>
+            <div class="exp-role">IT Trainer & Consultant</div>
+          </div>
+          <span class="exp-date">Previous</span>
+        </div>
+        <div class="exp-loc">Morocco</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Training in networking, Linux administration, virtualization, and cloud computing</li>
+            <li>VoIP systems implementation and IT infrastructure consulting</li>
+          </ul>
+        </div>
+        <div class="exp-tags">
+          <span class="tag">Linux</span>
+          <span class="tag">Networking</span>
+          <span class="tag cyan">VoIP</span>
+          <span class="tag">Virtualization</span>
+        </div>
+      </div>
+
+      <div class="exp-card animate">
+        <div class="exp-top">
+          <div>
+            <div class="exp-role">Cloud & Security Engineer &mdash; <span class="exp-org">Internship</span></div>
+          </div>
+          <span class="exp-date">May 2015 &mdash; Sep 2015</span>
+        </div>
+        <div class="exp-loc">Morocco</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Cloud computing implementation using OpenNebula and Xen hypervisor</li>
+            <li>Infrastructure security hardening and deployment automation</li>
+          </ul>
+        </div>
+        <div class="exp-tags">
+          <span class="tag">OpenNebula</span>
+          <span class="tag">Xen</span>
+          <span class="tag green">Security</span>
+          <span class="tag">Cloud</span>
+        </div>
+      </div>
     </section>
 
     <!-- Key Projects -->
-    <section class="section">
-      <h2>Key Achievements</h2>
-      <div class="timeline-item">
-        <span class="date">2025</span>
-        <h4>First RHTAS Implementation in EMEA</h4>
-        <p>Delivered <a href="https://www.redhat.com/en/blog/introducing-red-hat-trusted-artifact-signer" target="_blank" rel="noopener" style="color:var(--accent)">Red Hat Trusted Artifact Signer</a> for a major telecom — full Sigstore stack (cosign, Rekor, Fulcio, TUF) integrated with Tekton and GitLab CI.</p>
+    <section class="section" id="projects">
+      <div class="section-header">
+        <h2>// Key Projects</h2>
+        <span class="count">Enterprise engagements</span>
       </div>
-      <div class="timeline-item">
-        <span class="date">2024</span>
-        <h4>Enterprise GitOps Strategy</h4>
-        <p>Designed multi-team GitOps operating model with ArgoCD ApplicationSets, Kustomize overlays, and multi-cluster promotion workflows for a multinational client.</p>
+
+      <div class="highlight-card animate">
+        <div class="year">2025</div>
+        <h3><span class="badge">First in EMEA</span> Red Hat Trusted Artifact Signer (RHTAS)</h3>
+        <p>Delivered the first RHTAS implementation for a major EMEA telecom company. Established end-to-end software supply chain security for containerized CI/CD pipelines on OpenShift.</p>
+        <div class="exp-tags">
+          <span class="tag green">RHTAS</span>
+          <span class="tag green">Sigstore</span>
+          <span class="tag green">cosign</span>
+          <span class="tag green">Rekor</span>
+          <span class="tag green">Fulcio</span>
+          <span class="tag green">TUF</span>
+          <span class="tag">OpenShift 4.x</span>
+          <span class="tag amber">Tekton</span>
+          <span class="tag amber">GitLab CI</span>
+          <span class="tag">Sigstore Policy Controller</span>
+        </div>
       </div>
-      <div class="timeline-item">
-        <span class="date">2026</span>
-        <h4>OpenClaw Security Contributions</h4>
-        <p>Contributing supply chain security, credential firewall, secrets management, and runtime safety features to OpenClaw (270k+ stars).</p>
+
+      <div class="highlight-card animate">
+        <div class="year">2024</div>
+        <h3><span class="badge amber">Strategy</span> Enterprise GitOps Operating Model</h3>
+        <p>Designed and implemented a comprehensive GitOps strategy for a multinational client adopting OpenShift across multiple teams and environments. Defined repository structure, branching strategies, RBAC, promotion workflows, and drift detection.</p>
+        <div class="exp-tags">
+          <span class="tag">ArgoCD</span>
+          <span class="tag">ApplicationSets</span>
+          <span class="tag">Kustomize</span>
+          <span class="tag">OpenShift GitOps</span>
+          <span class="tag amber">sealed-secrets</span>
+          <span class="tag amber">Azure DevOps</span>
+        </div>
+      </div>
+
+      <div class="highlight-card animate">
+        <div class="year">2026</div>
+        <h3>OpenClaw Security Hardening</h3>
+        <p>Contributing supply chain security CI hardening, credential firewall architecture, secrets management (Bitwarden integration), credential leak prevention, and runtime safety features to OpenClaw (270k+ stars).</p>
+        <div class="exp-tags">
+          <span class="tag">TypeScript</span>
+          <span class="tag green">Supply Chain Security</span>
+          <span class="tag green">Credential Firewall</span>
+          <span class="tag">Secrets Management</span>
+          <span class="tag amber">Vitest</span>
+        </div>
       </div>
     </section>
 
     <!-- Open Source -->
-    <section class="section">
-      <h2>Open Source Contributions</h2>
-      <div class="card">
-        <h3>
-          <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener">OpenClaw</a>
-          <span class="stars">270k+&nbsp;&#11088;</span>
-        </h3>
-        <p class="desc">Bitwarden secrets integration, supply chain security CI hardening, credential firewall, credential leak prevention, runtime safety</p>
+    <section class="section" id="oss">
+      <div class="section-header">
+        <h2>// Open Source</h2>
+        <span class="count">Active contributor</span>
       </div>
-      <div class="card">
-        <h3>
-          <a href="https://github.com/nextcloud/desktop" target="_blank" rel="noopener">Nextcloud Desktop</a>
-          <span class="stars">3.6k+&nbsp;&#11088;</span>
-        </h3>
-        <p class="desc">Desktop sync client improvements</p>
-      </div>
-      <div class="card">
-        <h3>
-          <a href="https://github.com/openshift/openshift-docs" target="_blank" rel="noopener">OpenShift Docs</a>
-          <span class="stars">855+&nbsp;&#11088;</span>
-        </h3>
-        <p class="desc">Platform documentation contributions</p>
-      </div>
+
+      <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener" class="oss-card animate">
+        <div>
+          <div class="oss-name">openclaw/openclaw</div>
+          <div class="oss-desc">Bitwarden secrets integration, supply chain security CI, credential firewall, leak prevention, runtime safety</div>
+        </div>
+        <div class="oss-stars">270k+</div>
+      </a>
+
+      <a href="https://github.com/nextcloud/desktop" target="_blank" rel="noopener" class="oss-card animate">
+        <div>
+          <div class="oss-name">nextcloud/desktop</div>
+          <div class="oss-desc">Desktop sync client improvements</div>
+        </div>
+        <div class="oss-stars">3.6k+</div>
+      </a>
+
+      <a href="https://github.com/openshift/openshift-docs" target="_blank" rel="noopener" class="oss-card animate">
+        <div>
+          <div class="oss-name">openshift/openshift-docs</div>
+          <div class="oss-desc">Platform documentation contributions</div>
+        </div>
+        <div class="oss-stars">855+</div>
+      </a>
+
+      <a href="https://github.com/openshift/runbooks" target="_blank" rel="noopener" class="oss-card animate">
+        <div>
+          <div class="oss-name">openshift/runbooks</div>
+          <div class="oss-desc">Runbooks for alerts on OpenShift Container Platform</div>
+        </div>
+        <div class="oss-stars">92+</div>
+      </a>
     </section>
 
-    <!-- Tech -->
-    <section class="section">
-      <h2>Tech Stack</h2>
-      <div class="expertise-grid">
-        <div class="expertise-item">
-          <h4>Platforms</h4>
-          <div class="tags">
+    <!-- Skills -->
+    <section class="section" id="skills">
+      <div class="section-header">
+        <h2>// Skills & Tools</h2>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-group animate">
+          <h4>Platforms & Orchestration</h4>
+          <div class="exp-tags">
             <span class="tag">OpenShift 4.x</span>
             <span class="tag">Kubernetes</span>
             <span class="tag">AWS</span>
             <span class="tag">Azure</span>
+            <span class="tag">GCP</span>
+            <span class="tag">OpenStack</span>
           </div>
         </div>
-        <div class="expertise-item">
-          <h4>Security</h4>
-          <div class="tags">
-            <span class="tag">Sigstore</span>
-            <span class="tag">cosign</span>
-            <span class="tag">Rekor</span>
-            <span class="tag">RHTAS</span>
-            <span class="tag">TUF</span>
+        <div class="skill-group animate">
+          <h4>Supply Chain Security</h4>
+          <div class="exp-tags">
+            <span class="tag green">Sigstore</span>
+            <span class="tag green">cosign</span>
+            <span class="tag green">Rekor</span>
+            <span class="tag green">Fulcio</span>
+            <span class="tag green">RHTAS</span>
+            <span class="tag green">TUF</span>
           </div>
         </div>
-        <div class="expertise-item">
-          <h4>GitOps</h4>
-          <div class="tags">
+        <div class="skill-group animate">
+          <h4>GitOps & CI/CD</h4>
+          <div class="exp-tags">
             <span class="tag">ArgoCD</span>
             <span class="tag">Kustomize</span>
             <span class="tag">Helm</span>
             <span class="tag">Tekton</span>
+            <span class="tag amber">GitLab CI</span>
+            <span class="tag amber">Azure DevOps</span>
+            <span class="tag amber">GitHub Actions</span>
           </div>
         </div>
-        <div class="expertise-item">
-          <h4>IaC</h4>
-          <div class="tags">
+        <div class="skill-group animate">
+          <h4>Infrastructure as Code</h4>
+          <div class="exp-tags">
             <span class="tag">Terraform</span>
             <span class="tag">Ansible</span>
             <span class="tag">Crossplane</span>
+            <span class="tag">Packer</span>
           </div>
         </div>
-        <div class="expertise-item">
+        <div class="skill-group animate">
           <h4>Languages</h4>
-          <div class="tags">
-            <span class="tag">Shell</span>
-            <span class="tag">Go</span>
-            <span class="tag">Python</span>
-            <span class="tag">TypeScript</span>
+          <div class="exp-tags">
+            <span class="tag cyan">Shell / Bash</span>
+            <span class="tag cyan">Go</span>
+            <span class="tag cyan">Python</span>
+            <span class="tag cyan">TypeScript</span>
+            <span class="tag cyan">PowerShell</span>
           </div>
         </div>
-        <div class="expertise-item">
-          <h4>Containers</h4>
-          <div class="tags">
+        <div class="skill-group animate">
+          <h4>Containers & Runtime</h4>
+          <div class="exp-tags">
             <span class="tag">Podman</span>
             <span class="tag">Docker</span>
             <span class="tag">Buildah</span>
             <span class="tag">Skopeo</span>
+            <span class="tag">CRI-O</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Education -->
-    <section class="section">
-      <h2>Education</h2>
-      <div class="timeline-item">
-        <span class="date">2015 &mdash; 2017</span>
-        <h4>ENSAS &mdash; <span class="org">Ecole Nationale Des Sciences Appliqu&eacute;es de Safi</span></h4>
-        <p>Engineering degree</p>
+    <section class="section" id="education">
+      <div class="section-header">
+        <h2>// Education</h2>
+      </div>
+
+      <div class="edu-item animate">
+        <span class="edu-date">2015 &mdash; 2017</span>
+        <div class="edu-info">
+          <h4>ENSAS &mdash; Ecole Nationale Des Sciences Appliqu&eacute;es de Safi</h4>
+          <p>Engineering &mdash; Computer Science & Networks</p>
+        </div>
       </div>
     </section>
 
-    <!-- Volunteer -->
-    <section class="section">
-      <h2>Community</h2>
-      <div class="timeline-item">
-        <span class="date">2005 &mdash; 2017 &middot; 13 years</span>
-        <h4>Association EN-Nour D'handicap&eacute;</h4>
-        <p>Volunteer — health and disability support</p>
+    <!-- Writing / Talks (placeholder for future) -->
+    <section class="section" id="writing">
+      <div class="section-header">
+        <h2>// Articles & Talks</h2>
+        <span class="count">Coming soon</span>
+      </div>
+
+      <div class="empty-state animate">
+        <div class="icon">&#9998;</div>
+        <p>Articles and conference talks coming soon.<br>Topics: Supply chain security, GitOps at scale, OpenShift hardening.</p>
       </div>
     </section>
 
-    <!-- Links -->
-    <section class="section">
-      <h2>Connect</h2>
-      <div class="links">
-        <a href="https://github.com/ihsanmokhlisse" target="_blank" rel="noopener" class="link-btn">
+    <!-- Community -->
+    <section class="section" id="community">
+      <div class="section-header">
+        <h2>// Community</h2>
+      </div>
+
+      <div class="community-card animate">
+        <div class="emoji">&#x2764;&#xFE0F;</div>
+        <div>
+          <h4>Association EN-Nour D'handicap&eacute;</h4>
+          <p>Volunteer organizer in health and disability support</p>
+          <span class="duration">Jan 2005 &mdash; Dec 2017 &middot; 13 years</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <div class="section-header" style="margin-bottom:1rem;">
+          <h2 style="font-size:0.65rem;">// Languages</h2>
+        </div>
+        <div class="lang-bar">
+          <div class="lang-item">
+            <div class="lang-dot" style="background:var(--green)"></div>
+            <span class="lang-name">Arabic</span>
+            <span class="lang-level">Native</span>
+          </div>
+          <div class="lang-item">
+            <div class="lang-dot" style="background:var(--accent)"></div>
+            <span class="lang-name">French</span>
+            <span class="lang-level">Fluent</span>
+          </div>
+          <div class="lang-item">
+            <div class="lang-dot" style="background:var(--cyan)"></div>
+            <span class="lang-name">English</span>
+            <span class="lang-level">Professional</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Connect -->
+    <section class="section" id="connect">
+      <div class="section-header">
+        <h2>// Connect</h2>
+      </div>
+
+      <div class="connect-grid animate">
+        <a href="https://github.com/ihsanmokhlisse" target="_blank" rel="noopener" class="connect-btn">
           <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           GitHub
         </a>
-        <a href="https://linkedin.com/in/ihsanmokhlisse" target="_blank" rel="noopener" class="link-btn">
+        <a href="https://linkedin.com/in/ihsanmokhlisse" target="_blank" rel="noopener" class="connect-btn">
           <svg viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 01.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
           LinkedIn
+        </a>
+        <a href="https://gitlab.com/ihsanmokhlisse" target="_blank" rel="noopener" class="connect-btn">
+          <svg viewBox="0 0 16 16"><path d="M8 14.546L10.071 8H5.93L8 14.546z"/><path d="M8 14.546L5.93 8H1.735L8 14.546z" opacity=".7"/><path d="M1.735 8L.47 11.884c-.115.353.013.744.32.96L8 14.546 1.735 8z" opacity=".5"/><path d="M1.735 8h4.194L3.982 1.48c-.129-.396-.682-.396-.81 0L1.734 8z"/><path d="M8 14.546L10.07 8h4.195L8 14.546z" opacity=".7"/><path d="M14.265 8l1.265 3.884a.665.665 0 01-.32.96L8 14.546 14.265 8z" opacity=".5"/><path d="M14.265 8H10.07l1.948-6.52c.129-.396.682-.396.81 0L14.266 8z"/></svg>
+          GitLab
         </a>
       </div>
     </section>
 
-    <footer>
-      &copy; 2026 Ihsan Mokhlisse &middot; Built with plain HTML &amp; CSS &middot; Hosted on <a href="https://pages.cloudflare.com" target="_blank" rel="noopener">Cloudflare Pages</a>
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2026 Ihsan Mokhlisse &middot; Hosted on <a href="https://pages.cloudflare.com" target="_blank" rel="noopener">Cloudflare Pages</a></p>
     </footer>
 
   </div>
+</div>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.animate').forEach(el => {
+    el.style.animationPlayState = 'paused';
+    observer.observe(el);
+  });
+
+  // Smooth nav active state
+  const sections = document.querySelectorAll('.section[id], .hero[id]');
+  const navLinks = document.querySelectorAll('.topbar-nav a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 100;
+      if (window.scrollY >= top) current = section.id;
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === '#' + current ? 'var(--text-bright)' : '';
+    });
+  });
+</script>
 </body>
 </html>
